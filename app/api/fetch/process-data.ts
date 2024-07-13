@@ -1,20 +1,8 @@
 import { createReadStream } from "fs";
-import { parse, ParseResult } from "papaparse";
 import { createInterface } from "readline";
+import csvParser from "../utils/csv-parser";
 
 const chunkSize = 100;
-
-const invalidValues = ["none", "null", "na", "n/a", "nan", "", "missing", "nil", "undefined"];
-
-const transformInvalidValues = (value: any) => {
-    if (invalidValues.includes(value.toLowerCase()) || value === null || value === undefined) {
-        return 0;
-    }
-    else {
-        return value;
-    }
-};
-
 
 export default async function processData(index: string, path: string) {
     const startLine = parseInt(index || "0") * chunkSize + 1;
@@ -22,14 +10,14 @@ export default async function processData(index: string, path: string) {
     let chunk = "";
     let csvData: Record<string, any>[] = [];
     let lineNumber = 0;
+    let totalPages = 0;
 
-    const fileStream = createReadStream(path as string);
+    const fileStream = createReadStream(path);
     const rl = createInterface({
         input: fileStream,
     });
 
     const readLinesFromCSV = new Promise<Record<string, any>[]>((resolve, reject) => {
-
         rl.on("line", (line) => {
             if ((lineNumber === 0 || lineNumber >= startLine) && lineNumber < endLine) {
                 chunk += line + "\n";
@@ -38,18 +26,7 @@ export default async function processData(index: string, path: string) {
         });
 
         rl.on("close", () => {
-            parse(chunk, {
-                header: true,
-                dynamicTyping: true,
-                skipEmptyLines: true,
-                transform: transformInvalidValues,
-                complete: (results: ParseResult<Record<string, any>>) => {
-                    resolve(results.data);
-                },
-                error: (error: any) => {
-                    reject(error);
-                }
-            });
+            csvParser(chunk, resolve, reject);
         });
 
         rl.on("error", (error) => {
@@ -58,5 +35,6 @@ export default async function processData(index: string, path: string) {
     });
 
     csvData = await readLinesFromCSV;
-    return csvData;
-}
+    totalPages = Math.floor(lineNumber / chunkSize);
+    return [totalPages, csvData];
+};

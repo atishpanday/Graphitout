@@ -1,5 +1,5 @@
 export default async function fetchFile(index: number = 0, path: string) {
-    const fetchRes = await fetch(`/api/retrieve?index=0&path=${path}`);
-    const data = await fetchRes.json();
-    return data;
-}
+    const fetchRes = await fetch(`/api/fetch?index=${index}&path=${path}`);
+    const { totalPages, data } = await fetchRes.json();
+    return { totalPages, data };
+};

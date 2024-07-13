@@ -1,17 +1,33 @@
 "use client"
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import Pagination from './pagination';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import fetchFile from '../utils/fetch-file';
+import { setCSVData, setTotalPages } from '../store/csv-slice';
 
 export default function DataTable() {
     const csvData = useSelector((state: RootState) => state.csv.data);
+    const totalPages = useSelector((state: RootState) => state.csv.totalPages);
 
     const [index, setIndex] = useState<number>(0);
 
+    const dispatch = useDispatch();
+
+    const handlePageChange = async () => {
+        const filePath = localStorage.getItem("file-path")?.toString();
+        const { totalPages, data } = await fetchFile(index, filePath || "");
+        dispatch(setCSVData(data));
+        dispatch(setTotalPages(totalPages))
+    };
+
+    useEffect(() => {
+        handlePageChange();
+    }, [index]);
+
     return (
-        <div className="w-full h-[700px] flex flex-col border-2 rounded-md border-gray-300">
+        <div className="w-full max-h-lvh h-3/4 flex flex-col border-2 rounded-md border-gray-300">
             <div className="flex-10 overflow-y-scroll overflow-x-scroll rounded-t-md">
                 <table className="bg-white border border-gray-200">
                     <thead>
@@ -43,8 +59,8 @@ export default function DataTable() {
                 </table>
             </div>
             <div className="flex-1 flex justify-end p-1 bg-gray-50 shadow-md rounded-b-md">
-                <Pagination index={index} totalPages={10} setIndex={setIndex} />
+                <Pagination index={index} totalPages={totalPages} setIndex={setIndex} handlePageChange={handlePageChange} />
             </div>
         </div>
     );
-}
+};

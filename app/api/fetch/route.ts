@@ -8,8 +8,8 @@ export async function GET(request: Request) {
         const index = searchParams.get("index");
         const path = searchParams.get("path");
 
-        const csvData = await processData(index as string, path as string);
-        return NextResponse.json(csvData);
+        const [totalPages, csvData] = await processData(index as string, path as string);
+        return NextResponse.json({ totalPages: totalPages, data: csvData });
     } catch (err) {
         return NextResponse.json({ err });
     }

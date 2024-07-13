@@ -1,28 +1,45 @@
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, SetStateAction } from "react";
 
 interface PagianationProps {
     index: number,
     totalPages: number,
     setIndex: Dispatch<SetStateAction<number>>,
+    handlePageChange: (ind: number) => void,
 };
 
-export default function Pagination({ index, totalPages, setIndex }: PagianationProps) {
-    const arr = new Array(totalPages);
-    console.log(arr);
+export default function Pagination({ index, totalPages, setIndex, handlePageChange }: PagianationProps) {
+    const arr: number[] = [];
+    const maxPageNumDisplay = Math.min(5, totalPages);
+    for (let i = 0; i < maxPageNumDisplay; i++) {
+        arr.push(i);
+    }
 
     return (
-        <nav aria-label="Pagination" className="inline-flex -space-x-px rounded-md shadow-sm">
+        <nav aria-label="Pagination" className="flex rounded-md shadow-sm">
+            <div
+                onClick={() => setIndex(prev => prev === 0 ? 0 : prev - 1)}
+                className={`px-4 py-2 border-2 border-r-0 border-gray-200 rounded-l-md cursor-pointer`}
+            >
+                Prev
+            </div>
             {
-                arr.map((_, i) => (
+                arr.map((num, i) => (
 
-                    <a
-                        onClick={() => setIndex(i)}
-                        className={`relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${i === index ? "bg-gray-300" : "bg-white"}`}
+                    <div
+                        key={i}
+                        onClick={() => setIndex(num)}
+                        className={`px-4 py-2 border-2 border-r-0 border-gray-200 ${num === index && "bg-gray-200"} cursor-pointer`}
                     >
-                        {i + 1}
-                    </a>
+                        {num + 1}
+                    </div>
                 ))
             }
+            <div
+                onClick={() => setIndex(prev => prev === totalPages - 1 ? totalPages - 1 : prev + 1)}
+                className={`px-4 py-2 border-2 border-gray-200 rounded-r-md cursor-pointer`}
+            >
+                Next
+            </div>
         </nav>
-    )
-}
+    );
+};

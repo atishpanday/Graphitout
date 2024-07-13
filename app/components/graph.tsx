@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import Viewer from "./viewer";
 import DropDown from "./dropdown";
-import { VictoryAxis, VictoryBar, VictoryChart, VictoryTheme } from "victory";
+import BarGraph from "./graphs/bar-graph";
 
 const chartTypes = ["Bar", "Area", "Line", "Scatter"];
 
@@ -25,11 +25,7 @@ export default function Graph() {
                     </div>
                     {
                         x.length > 0 && y.length > 0 &&
-                        <VictoryChart theme={VictoryTheme.material} width={800} height={500}>
-                            <VictoryBar data={csvData} x={x} y={y} style={{ data: { fill: "#ff00ff" } }} />
-                            <VictoryAxis tickValues={csvData.map(data => data[y])} label={x} />
-                            <VictoryAxis dependentAxis label={y} />
-                        </VictoryChart>
+                        <BarGraph data={csvData} x={x} y={y} />
                     }
                 </div>
             }
