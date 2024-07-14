@@ -4,6 +4,7 @@ import { RootState } from "../store/store";
 import Viewer from "./viewer";
 import DropDown from "./dropdown";
 import BarGraph from "./graphs/bar-graph";
+import LineGraph from "./graphs/line-graph";
 
 const chartTypes = ["Bar", "Area", "Line", "Scatter"];
 
@@ -13,11 +14,13 @@ export default function Graph() {
     const [chartType, setChartType] = useState<string>("Bar");
 
     const csvData = useSelector((state: RootState) => state.csv.data);
+    const totalPages = useSelector((state: RootState) => state.csv.totalPages);
 
     return (
         <Viewer>
             {
-                csvData.length > 0 && <div className="p-1 h-full flex flex-col justify-between items-center">
+                csvData.length > 0 &&
+                <div className="p-1 h-full flex flex-col justify-between items-center">
                     <div className="w-full flex justify-end items-center text-gray-900">
                         x: <DropDown selected={x} setSelected={setX} items={Object.keys(csvData[0] || [])} />
                         y: <DropDown selected={y} setSelected={setY} items={Object.keys(csvData[0] || [])} />
@@ -25,7 +28,10 @@ export default function Graph() {
                     </div>
                     {
                         x.length > 0 && y.length > 0 &&
-                        <BarGraph data={csvData} x={x} y={y} />
+                        <>
+                            {chartType === "Bar" && <BarGraph totalPages={totalPages} x={x} y={y} />}
+                            {chartType === "Line" && <LineGraph totalPages={totalPages} x={x} y={y} />}
+                        </>
                     }
                 </div>
             }

@@ -1,11 +1,9 @@
-"use client"
-
 import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from 'react-dropzone'
 import { useDispatch } from "react-redux";
 import { setCSVData, setTotalPages } from "../store/csv-slice";
 import uploadFile from "../utils/upload-file";
-import fetchFile from "../utils/fetch-file";
+import fetchData from "../utils/fetch-data";
 
 export default function UploadFile() {
     const [file, setFile] = useState<File | null>(null);
@@ -32,7 +30,7 @@ export default function UploadFile() {
             if (uploadRes?.ok) {
                 const filePath = (await uploadRes.json()).path
                 localStorage.setItem("file-path", filePath);
-                const { totalPages, data } = await fetchFile(0, filePath);
+                const { totalPages, data } = await fetchData(0, filePath);
                 dispatch(setCSVData(data));
                 dispatch(setTotalPages(totalPages));
             }

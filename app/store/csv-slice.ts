@@ -20,9 +20,12 @@ export const csvSlice = createSlice({
         setTotalPages: (state, action: PayloadAction<number>) => {
             state.totalPages = action.payload;
         },
+        clearCSVData: (state) => {
+            state.data = [];
+        },
     },
 });
 
-export const { setCSVData, setTotalPages } = csvSlice.actions;
+export const { setCSVData, setTotalPages, clearCSVData } = csvSlice.actions;
 
 export default csvSlice.reducer;

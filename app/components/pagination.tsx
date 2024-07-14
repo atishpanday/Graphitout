@@ -14,11 +14,18 @@ export default function Pagination({ index, totalPages, setIndex, handlePageChan
         arr.push(i);
     }
 
+    const handleIndexChange = (ind: number) => {
+        if (ind >= 0 && ind < totalPages) {
+            handlePageChange(ind);
+            setIndex(ind);
+        }
+    };
+
     return (
         <nav aria-label="Pagination" className="flex rounded-md shadow-sm">
             <div
-                onClick={() => setIndex(prev => prev === 0 ? 0 : prev - 1)}
-                className={`px-4 py-2 border-2 border-r-0 border-gray-200 rounded-l-md cursor-pointer`}
+                onClick={() => handleIndexChange(index - 1)}
+                className={`px-4 py-2 border-2 border-r-0 border-gray-200 rounded-l-md cursor-pointer hover:bg-gray-200`}
             >
                 Prev
             </div>
@@ -27,16 +34,16 @@ export default function Pagination({ index, totalPages, setIndex, handlePageChan
 
                     <div
                         key={i}
-                        onClick={() => setIndex(num)}
-                        className={`px-4 py-2 border-2 border-r-0 border-gray-200 ${num === index && "bg-gray-200"} cursor-pointer`}
+                        onClick={() => handleIndexChange(num)}
+                        className={`px-4 py-2 border-2 border-r-0 border-gray-200 ${num === index && "bg-gray-200"} cursor-pointer hover:bg-gray-200`}
                     >
                         {num + 1}
                     </div>
                 ))
             }
             <div
-                onClick={() => setIndex(prev => prev === totalPages - 1 ? totalPages - 1 : prev + 1)}
-                className={`px-4 py-2 border-2 border-gray-200 rounded-r-md cursor-pointer`}
+                onClick={() => handleIndexChange(index + 1)}
+                className={`px-4 py-2 border-2 border-gray-200 rounded-r-md cursor-pointer hover:bg-gray-200`}
             >
                 Next
             </div>

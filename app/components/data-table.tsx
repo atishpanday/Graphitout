@@ -1,11 +1,10 @@
-"use client"
-
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import Pagination from './pagination';
-import { useEffect, useState } from 'react';
-import fetchFile from '../utils/fetch-file';
-import { setCSVData, setTotalPages } from '../store/csv-slice';
+import { useState } from 'react';
+import fetchFile from '../utils/fetch-data';
+import { clearCSVData, setCSVData, setTotalPages } from '../store/csv-slice';
+import deleteFile from '../utils/delete-file';
 
 export default function DataTable() {
     const csvData = useSelector((state: RootState) => state.csv.data);
@@ -15,16 +14,18 @@ export default function DataTable() {
 
     const dispatch = useDispatch();
 
-    const handlePageChange = async () => {
+    const handlePageChange = async (ind: number) => {
         const filePath = localStorage.getItem("file-path")?.toString();
-        const { totalPages, data } = await fetchFile(index, filePath || "");
+        const { totalPages, data } = await fetchFile(ind, filePath || "");
         dispatch(setCSVData(data));
         dispatch(setTotalPages(totalPages))
     };
 
-    useEffect(() => {
-        handlePageChange();
-    }, [index]);
+    const handleDeleteData = async () => {
+        dispatch(clearCSVData());
+        const filePath = localStorage.getItem("file-path");
+        await deleteFile(filePath || "");
+    };
 
     return (
         <div className="w-full max-h-lvh h-3/4 flex flex-col border-2 rounded-md border-gray-300">
@@ -58,7 +59,10 @@ export default function DataTable() {
                     </tbody>
                 </table>
             </div>
-            <div className="flex-1 flex justify-end p-1 bg-gray-50 shadow-md rounded-b-md">
+            <div className="flex-1 flex justify-between p-1 bg-gray-50 shadow-md rounded-b-md">
+                <div className="px-2 w-1/2 flex justify-start items-center">
+                    <button className="px-4 py-2 mx-1 rounded-md bg-red-500 hover:bg-red-300" onClick={() => handleDeleteData()}>Delete</button>
+                </div>
                 <Pagination index={index} totalPages={totalPages} setIndex={setIndex} handlePageChange={handlePageChange} />
             </div>
         </div>

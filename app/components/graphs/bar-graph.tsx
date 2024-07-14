@@ -1,28 +1,20 @@
+import { GraphProps } from "@/app/interfaces/graph";
+import fetchCumulativeDataAverage from "@/app/utils/fetch-cumulative-data-average";
 import { ResponsiveBar } from "@nivo/bar";
+import { useEffect, useState } from "react";
 
-interface BarGraphProps {
-    data: Record<string, any>[],
-    x: string,
-    y: string,
-};
+export default function BarGraph({ totalPages, x, y }: GraphProps) {
 
-export default function BarGraph({ data, x, y }: BarGraphProps) {
-    const avgData: Record<string, number> = {};
-    const countData: Record<string, number> = {};
-    data.map((d, i) => {
-        if (d[x] in avgData) {
-            avgData[d[x]] += d[y];
-            countData[d[x]] += 1;
-        }
-        else {
-            avgData[d[x]] = d[y];
-            countData[d[x]] = 1;
-        }
-    });
-    const avgDataArr: Record<string, string | number>[] = [];
-    Object.keys(avgData).map((key, i) => {
-        avgDataArr.push({ [x]: key, [y]: avgData[key] / countData[key] });
-    });
+    const [avgDataArr, setAvgDataArr] = useState<Record<string, any>[]>([]);
+
+    const getAvgData = async () => {
+        const data = await fetchCumulativeDataAverage(totalPages, x, y);
+        setAvgDataArr(data);
+    };
+
+    useEffect(() => {
+        getAvgData();
+    }, []);
 
     return (
         <ResponsiveBar
@@ -33,7 +25,7 @@ export default function BarGraph({ data, x, y }: BarGraphProps) {
             padding={0.3}
             valueScale={{ type: 'linear' }}
             indexScale={{ type: 'band', round: true }}
-            colors={{ scheme: 'nivo' }}
+            colors={{ scheme: "dark2" }}
             axisTop={null}
             axisRight={null}
             axisBottom={{
