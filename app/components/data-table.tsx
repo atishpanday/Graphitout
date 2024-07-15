@@ -61,7 +61,7 @@ export default function DataTable() {
             </div>
             <div className="flex-1 flex justify-between p-1 bg-gray-50 shadow-md rounded-b-md">
                 <div className="px-2 w-1/2 flex justify-start items-center">
-                    <button className="px-4 py-2 mx-1 rounded-md bg-red-500 hover:bg-red-300" onClick={() => handleDeleteData()}>Delete</button>
+                    <button className="px-4 py-2 mx-1 text-white rounded-md bg-red-500 hover:bg-red-300" onClick={() => handleDeleteData()}>Delete</button>
                 </div>
                 <Pagination index={index} totalPages={totalPages} setIndex={setIndex} handlePageChange={handlePageChange} />
             </div>

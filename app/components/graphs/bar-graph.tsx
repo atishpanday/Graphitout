@@ -1,20 +1,28 @@
 import { GraphProps } from "@/app/interfaces/graph";
-import fetchCumulativeDataAverage from "@/app/utils/fetch-cumulative-data-average";
+import { RootState } from "@/app/store/store";
 import { ResponsiveBar } from "@nivo/bar";
-import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function BarGraph({ totalPages, x, y }: GraphProps) {
 
-    const [avgDataArr, setAvgDataArr] = useState<Record<string, any>[]>([]);
+    const csvData = useSelector((state: RootState) => state.csv.data);
+    const avgData: Record<string, number> = {};
+    const countData: Record<string, number> = {};
 
-    const getAvgData = async () => {
-        const data = await fetchCumulativeDataAverage(totalPages, x, y);
-        setAvgDataArr(data);
-    };
-
-    useEffect(() => {
-        getAvgData();
-    }, []);
+    const avgDataArr: Record<string, string | number>[] = [];
+    csvData.map((d: Record<string, any>, i: number) => {
+        if (d[x] in avgData) {
+            avgData[d[x]] += d[y];
+            countData[d[x]] += 1;
+        }
+        else {
+            avgData[d[x]] = d[y];
+            countData[d[x]] = 1;
+        }
+    });
+    Object.keys(avgData).map((key, i) => {
+        avgDataArr.push({ [x]: key, [y]: avgData[key] / countData[key] });
+    });
 
     return (
         <ResponsiveBar

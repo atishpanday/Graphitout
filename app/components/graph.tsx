@@ -5,8 +5,9 @@ import Viewer from "./viewer";
 import DropDown from "./dropdown";
 import BarGraph from "./graphs/bar-graph";
 import LineGraph from "./graphs/line-graph";
+import ScatterPlot from "./graphs/scatterplot";
 
-const chartTypes = ["Bar", "Area", "Line", "Scatter"];
+const chartTypes = ["Bar", "Line", "Scatter"];
 
 export default function Graph() {
     const [x, setX] = useState<string>("");
@@ -31,6 +32,7 @@ export default function Graph() {
                         <>
                             {chartType === "Bar" && <BarGraph totalPages={totalPages} x={x} y={y} />}
                             {chartType === "Line" && <LineGraph totalPages={totalPages} x={x} y={y} />}
+                            {chartType === "Scatter" && <ScatterPlot totalPages={totalPages} x={x} y={y} />}
                         </>
                     }
                 </div>
