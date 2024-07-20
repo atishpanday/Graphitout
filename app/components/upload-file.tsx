@@ -19,7 +19,7 @@ export default function UploadFile() {
         onDrop,
         accept: {
             "text/csv": [".csv", ".txt"],
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"],
+            // "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"],
         },
         multiple: false,
     });
@@ -56,9 +56,9 @@ export default function UploadFile() {
                     <input {...getInputProps()} />
                     <button
                         type="button"
-                        className="px-4 py-2 m-1 font-semibold border-2 border-solid border-blue-500 rounded-md shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+                        className="px-4 py-2 m-1 font-semibold rounded-sm shadow-md hover:bg-gray-100"
                     >
-                        Upload or drag and drop a file (.csv, .txt, .xlsx)
+                        Upload or drag and drop a file (.csv, .txt)
                     </button>
                     <div>{file?.name}</div>
                 </form>

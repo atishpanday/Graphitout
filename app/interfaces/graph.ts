@@ -5,15 +5,7 @@ export interface GraphProps {
     graphOptions: GraphOptions,
 };
 
-export interface LineGraphData {
-    id: string | number,
-    data: Array<{
-        x: number | string | Date,
-        y: number | string | Date,
-    }>,
-};
-
-export interface ScatterPlotData {
+export interface GraphData {
     id: string | number,
     data: Array<{
         x: number | string | Date,
@@ -61,4 +53,10 @@ export type ColorScheme = "nivo"
 
 export interface GraphOptions {
     colorScheme: ColorScheme
+};
+
+export interface AverageData {
+    avgDataArr: GraphData[],
+    leftMargin: number,
+    bottomMargin: number,
 };

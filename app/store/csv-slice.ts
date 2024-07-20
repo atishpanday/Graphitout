@@ -32,6 +32,9 @@ export const csvSlice = createSlice({
         },
         clearCSVData: (state) => {
             state.data = [];
+            state.totalPages = 0;
+            state.numericalColumns = [];
+            state.stringColumns = [];
         },
     },
 });
