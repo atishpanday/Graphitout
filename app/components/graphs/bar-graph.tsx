@@ -3,7 +3,7 @@ import { RootState } from "@/app/store/store";
 import { ResponsiveBar } from "@nivo/bar";
 import { useSelector } from "react-redux";
 
-export default function BarGraph({ totalPages, x, y }: GraphProps) {
+export default function BarGraph({ totalPages, x, y, graphOptions }: GraphProps) {
 
     const csvData = useSelector((state: RootState) => state.csv.data);
     const avgData: Record<string, number> = {};
@@ -33,7 +33,7 @@ export default function BarGraph({ totalPages, x, y }: GraphProps) {
             padding={0.3}
             valueScale={{ type: 'linear' }}
             indexScale={{ type: 'band', round: true }}
-            colors={{ scheme: "dark2" }}
+            colors={{ scheme: graphOptions.colorScheme }}
             axisTop={null}
             axisRight={null}
             axisBottom={{
@@ -56,6 +56,7 @@ export default function BarGraph({ totalPages, x, y }: GraphProps) {
             }}
             labelSkipWidth={12}
             labelSkipHeight={12}
+            enableLabel={false}
         />
     );
 };

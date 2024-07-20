@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from 'react-dropzone'
 import { useDispatch } from "react-redux";
-import { setCSVData, setTotalPages } from "../store/csv-slice";
+import { setCSVData, setNumericalColumns, setStringColumns, setTotalPages } from "../store/csv-slice";
 import uploadFile from "../utils/upload-file";
 import fetchData from "../utils/fetch-data";
+import Viewer from "./viewer";
 
 export default function UploadFile() {
     const [file, setFile] = useState<File | null>(null);
@@ -32,6 +33,10 @@ export default function UploadFile() {
                 localStorage.setItem("file-path", filePath);
                 const { totalPages, data } = await fetchData(0, filePath);
                 dispatch(setCSVData(data));
+                const numericalColumns = Object.keys(data[0]).filter((key: string) => { if (typeof data[0][key] === "number") return key });
+                const stringColumns = Object.keys(data[0]).filter((key: string) => { if (typeof data[0][key] === "string") return key });
+                dispatch(setNumericalColumns(numericalColumns));
+                dispatch(setStringColumns(stringColumns));
                 dispatch(setTotalPages(totalPages));
             }
         }
@@ -42,20 +47,22 @@ export default function UploadFile() {
     }, [file]);
 
     return (
-        <div
-            {...getRootProps()}
-            className={`h-3/4 w-full flex flex-col justify-center items-center border-4 border-dashed ${isDragActive ? "border-blue-500" : "border-gray-300"} rounded-md`}
-        >
-            <form>
-                <input {...getInputProps()} />
-                <button
-                    type="button"
-                    className="px-4 py-2 m-1 font-semibold border-2 border-solid border-blue-500 rounded-md shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-                >
-                    Upload or drag and drop a file (.csv, .txt, .xlsx)
-                </button>
-                <div>{file?.name}</div>
-            </form>
-        </div>
+        <Viewer>
+            <div
+                {...getRootProps()}
+                className={`w-full h-full flex flex-col justify-center items-center border-4 border-dashed ${isDragActive ? "border-blue-500" : "border-gray-300"}`}
+            >
+                <form>
+                    <input {...getInputProps()} />
+                    <button
+                        type="button"
+                        className="px-4 py-2 m-1 font-semibold border-2 border-solid border-blue-500 rounded-md shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+                    >
+                        Upload or drag and drop a file (.csv, .txt, .xlsx)
+                    </button>
+                    <div>{file?.name}</div>
+                </form>
+            </div>
+        </Viewer>
     );
 };

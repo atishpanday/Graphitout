@@ -3,7 +3,7 @@ import { RootState } from '@/app/store/store';
 import { ResponsiveScatterPlot } from '@nivo/scatterplot'
 import { useSelector } from 'react-redux';
 
-export default function ScatterPlot({ totalPages, x, y }: GraphProps) {
+export default function ScatterPlot({ totalPages, x, y, graphOptions }: GraphProps) {
     const csvData = useSelector((state: RootState) => state.csv.data);
     const avgData: Record<string, number> = {};
     const countData: Record<string, number> = {};
@@ -30,6 +30,7 @@ export default function ScatterPlot({ totalPages, x, y }: GraphProps) {
             xFormat=">-.2f"
             yScale={{ type: 'linear', min: 0, max: 'auto' }}
             yFormat=">-.2f"
+            colors={{ scheme: graphOptions.colorScheme }}
             blendMode="multiply"
             axisTop={null}
             axisRight={null}

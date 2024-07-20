@@ -3,7 +3,7 @@ import { RootState } from "@/app/store/store";
 import { ResponsiveLine } from "@nivo/line";
 import { useSelector } from "react-redux";
 
-export default function LineGraph({ totalPages, x, y }: GraphProps) {
+export default function LineGraph({ totalPages, x, y, graphOptions }: GraphProps) {
     const csvData = useSelector((state: RootState) => state.csv.data);
     const avgData: Record<string, number> = {};
     const countData: Record<string, number> = {};
@@ -27,6 +27,7 @@ export default function LineGraph({ totalPages, x, y }: GraphProps) {
             data={[{ id: "0", data: avgDataArr }]}
             margin={{ top: 50, right: 50, bottom: 150, left: 100 }}
             xScale={{ type: 'point' }}
+            colors={{ scheme: graphOptions.colorScheme }}
             yScale={{
                 type: 'linear',
                 min: 'auto',
@@ -58,10 +59,11 @@ export default function LineGraph({ totalPages, x, y }: GraphProps) {
             pointBorderWidth={2}
             pointBorderColor={{ from: 'serieColor' }}
             pointLabelYOffset={-12}
+            pointLabel="data.y"
             enableArea={true}
             areaBaselineValue={avgDataArr.reduce((accumulator, currentValue) => Math.min(accumulator as number, currentValue.y as number), avgDataArr[0].y)}
             enableTouchCrosshair={true}
-            useMesh={true}
+            useMesh={false}
             legends={[
                 {
                     anchor: 'top-right',
