@@ -6,6 +6,7 @@ const nextConfig = {
     basePath: isProd ? '/Graphitout' : '',
     assetPrefix: isProd ? '/Graphitout/' : '',
     trailingSlash: true,
+    output: 'export',
 };
 
 export default nextConfig;
