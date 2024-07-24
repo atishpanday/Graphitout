@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from 'react-dropzone'
 import { useDispatch } from "react-redux";
-import { setCSVData, setNumericalColumns, setStringColumns, setTotalPages } from "../store/csv-slice";
-import uploadFile from "../utils/upload-file";
-import fetchData from "../utils/fetch-data";
+import { setCSVData, setFileName, setNumericalColumns, setStringColumns, setTotalPages } from "../_store/csv-slice";
+import uploadFile from "../_utils/upload-file";
+import fetchDataChunks from "../_utils/fetch-data-chunks";
 import Viewer from "./viewer";
 
 export default function UploadFile() {
@@ -19,7 +19,7 @@ export default function UploadFile() {
         onDrop,
         accept: {
             "text/csv": [".csv", ".txt"],
-            // "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"],
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"],
         },
         multiple: false,
     });
@@ -29,9 +29,9 @@ export default function UploadFile() {
             const uploadRes = await uploadFile(file);
 
             if (uploadRes?.ok) {
-                const filePath = (await uploadRes.json()).path
-                localStorage.setItem("file-path", filePath);
-                const { totalPages, data } = await fetchData(0, filePath);
+                const fileName = (await uploadRes.json()).fileName
+                dispatch(setFileName(fileName));
+                const { totalPages, data } = await fetchDataChunks(0, fileName);
                 dispatch(setCSVData(data));
                 const numericalColumns = Object.keys(data[0]).filter((key: string) => { if (typeof data[0][key] === "number") return key });
                 const stringColumns = Object.keys(data[0]).filter((key: string) => { if (typeof data[0][key] === "string") return key });
@@ -58,7 +58,7 @@ export default function UploadFile() {
                         type="button"
                         className="px-4 py-2 m-1 font-semibold rounded-sm shadow-md hover:bg-gray-100"
                     >
-                        Upload or drag and drop a file (.csv, .txt)
+                        Upload or drag and drop a file (.csv, .txt, .xlsx)
                     </button>
                     <div>{file?.name}</div>
                 </form>

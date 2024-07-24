@@ -1,37 +1,34 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store/store';
+import { RootState } from '../_store/store';
 import Pagination from './pagination';
 import { useState } from 'react';
-import fetchFile from '../utils/fetch-data';
-import { clearCSVData, setCSVData, setTotalPages } from '../store/csv-slice';
-import deleteFile from '../utils/delete-file';
+import fetchDataChunks from '../_utils/fetch-data-chunks';
+import { clearCSVData, setCSVData, setTotalPages } from '../_store/csv-slice';
+import deleteFile from '../_utils/delete-file';
 import Viewer from './viewer';
 
 export default function DataTable() {
-    const csvData = useSelector((state: RootState) => state.csv.data);
-    const totalPages = useSelector((state: RootState) => state.csv.totalPages);
+    const { fileName, totalPages, csvData } = useSelector((state: RootState) => state.csv);
 
     const [index, setIndex] = useState<number>(0);
 
     const dispatch = useDispatch();
 
     const handlePageChange = async (ind: number) => {
-        const filePath = localStorage.getItem("file-path")?.toString();
-        const { totalPages, data } = await fetchFile(ind, filePath || "");
+        const { totalPages, data } = await fetchDataChunks(ind, fileName || "");
         dispatch(setCSVData(data));
         dispatch(setTotalPages(totalPages))
     };
 
     const handleDeleteData = async () => {
+        await deleteFile(fileName || "");
         dispatch(clearCSVData());
-        const filePath = localStorage.getItem("file-path");
-        await deleteFile(filePath || "");
     };
 
     return (
         <Viewer>
-            <div className="w-full h-full flex flex-col">
-                <div className="flex-10 overflow-y-scroll overflow-x-scroll">
+            <div className="w-full h-full flex flex-col justify-between">
+                <div className="overflow-y-scroll overflow-x-scroll">
                     <table className="bg-white border border-gray-200">
                         <thead>
                             <tr className="bg-gray-100 divide-x divide-white">
@@ -61,7 +58,7 @@ export default function DataTable() {
                         </tbody>
                     </table>
                 </div>
-                <div className="flex-1 flex justify-between py-2 px-4 bg-gray-50 ring-1 ring-gray-200">
+                <div className="flex justify-between py-2 px-4 bg-gray-50 ring-1 ring-gray-200">
                     <div className="flex justify-start items-center">
                         <button className="px-4 py-2 mx-1 text-white rounded-sm bg-red-500 hover:bg-red-400" onClick={() => handleDeleteData()}>Delete</button>
                     </div>

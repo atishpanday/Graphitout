@@ -1,7 +1,4 @@
 export interface GraphProps {
-    totalPages: number,
-    x: string,
-    y: string,
     graphOptions: GraphOptions,
 };
 
@@ -51,8 +48,35 @@ export type ColorScheme = "nivo"
     | "yellow_orange_brown"
     | "yellow_orange_red";
 
+export interface Margin {
+    top: number,
+    right: number,
+    bottom: number,
+    left: number,
+};
+
+export interface AxisOptions {
+    tickSize: number,
+    tickPadding: number,
+    tickRotation: number,
+    legend: string,
+    legendPosition: "start" | "middle" | "end" | undefined,
+    legendOffset: number,
+    truncateTickAt: number,
+};
+
+export interface AxisOptionsOrientations {
+    top: AxisOptions | null,
+    right: AxisOptions | null,
+    bottom: AxisOptions | null,
+    left: AxisOptions | null,
+};
+
 export interface GraphOptions {
-    colorScheme: ColorScheme
+    data: GraphData[],
+    colorScheme: ColorScheme,
+    margin: Margin,
+    axisOptions: AxisOptionsOrientations,
 };
 
 export interface AverageData {

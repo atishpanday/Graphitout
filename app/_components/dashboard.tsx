@@ -4,11 +4,11 @@ import Graph from "./graph"
 import Banner from "./banner"
 import AddGraph from "./add-graph";
 import { useSelector } from "react-redux";
-import { RootState } from "../store/store";
+import { RootState } from "../_store/store";
 
 export default function Dashboard() {
 
-    const csvData = useSelector((state: RootState) => state.csv.data);
+    const csvData = useSelector((state: RootState) => state.csv.csvData);
 
     const [graphArr, setGraphArr] = useState<number[]>([0]);
 

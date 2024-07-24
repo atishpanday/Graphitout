@@ -1,4 +1,4 @@
-import fetchData from "./fetch-data";
+import fetchData from "./fetch-data-chunks";
 
 export default async function fetchCumulativeDataAverage(_totalPages: number, x: string, y: string) {
     const avgData: Record<string, number> = {};

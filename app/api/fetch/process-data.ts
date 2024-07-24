@@ -1,6 +1,6 @@
 import { createReadStream } from "fs";
 import { createInterface } from "readline";
-import csvParser from "../utils/csv-parser";
+import csvParser from "../_utils/csv-parser";
 
 const chunkSize = 100;
 

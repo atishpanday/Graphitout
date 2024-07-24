@@ -13,4 +13,4 @@ export function DELETE(request: Request) {
     } catch (err) {
         return NextResponse.json({ err });
     }
-}
+};

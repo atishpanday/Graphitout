@@ -1,15 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface CSVState {
-    totalPages: number;
-    data: Record<string, string>[];
-    numericalColumns: string[];
-    stringColumns: string[];
+    fileName: string,
+    totalPages: number,
+    csvData: Record<string, string>[],
+    numericalColumns: string[],
+    stringColumns: string[],
 };
 
 const initialState: CSVState = {
+    fileName: "",
     totalPages: 0,
-    data: [],
+    csvData: [],
     numericalColumns: [],
     stringColumns: [],
 };
@@ -18,11 +20,14 @@ export const csvSlice = createSlice({
     name: 'csv',
     initialState,
     reducers: {
-        setCSVData: (state, action: PayloadAction<Record<string, any>[]>) => {
-            state.data = action.payload;
+        setFileName: (state, action: PayloadAction<string>) => {
+            state.fileName = action.payload;
         },
         setTotalPages: (state, action: PayloadAction<number>) => {
             state.totalPages = action.payload;
+        },
+        setCSVData: (state, action: PayloadAction<Record<string, any>[]>) => {
+            state.csvData = action.payload;
         },
         setNumericalColumns: (state, action: PayloadAction<string[]>) => {
             state.numericalColumns = action.payload;
@@ -31,14 +36,15 @@ export const csvSlice = createSlice({
             state.stringColumns = action.payload;
         },
         clearCSVData: (state) => {
-            state.data = [];
+            state.fileName = "";
             state.totalPages = 0;
+            state.csvData = [];
             state.numericalColumns = [];
             state.stringColumns = [];
         },
     },
 });
 
-export const { setCSVData, setTotalPages, setNumericalColumns, setStringColumns, clearCSVData } = csvSlice.actions;
+export const { setFileName, setTotalPages, setCSVData, setNumericalColumns, setStringColumns, clearCSVData } = csvSlice.actions;
 
 export default csvSlice.reducer;

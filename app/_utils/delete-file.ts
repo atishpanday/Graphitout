@@ -1,6 +1,6 @@
-export default async function deleteFile(filePath: string) {
+export default async function deleteFile(fileName: string) {
     try {
-        const res = await fetch(`/api/delete-file?path=${filePath}`, {
+        const res = await fetch(`http://localhost:8000/api/delete-file?file-name=${fileName}`, {
             method: "DELETE",
         });
         if (res.ok) {

@@ -5,7 +5,7 @@ export default async function uploadFile(file: File | null) {
     }
     const formData = new FormData();
     formData.append("file", file);
-    const res = await fetch("/api/upload", {
+    const res = await fetch("http://localhost:8000/api/upload-file", {
         method: "POST",
         body: formData,
     });
