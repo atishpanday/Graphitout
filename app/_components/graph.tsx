@@ -1,93 +1,68 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../_store/store";
 import Viewer from "./viewer";
 import DropDown from "./dropdown";
-import BarGraph from "./graphs/bar-graph";
-import LineGraph from "./graphs/line-graph";
-import ScatterPlot from "./graphs/scatterplot";
 import { colorSchemes } from "../_utils/color-scheme";
-import { ColorScheme, GraphOptions } from "../_interfaces/graph";
-import { getAverageData } from "../_utils/get-average-data";
+import { ColorScheme } from "../_interfaces/graph";
+import GraphViewer from "./graph-viewer";
 
 const chartTypes = ["Bar", "Line", "Scatter"];
 
 export default function Graph() {
-    const { csvData, totalPages, numericalColumns, stringColumns } = useSelector((state: RootState) => state.csv);
+    const { csvData, numericalColumns, stringColumns } = useSelector((state: RootState) => state.csv);
 
     const [x, setX] = useState<string>("");
     const [y, setY] = useState<string>("");
     const [chartType, setChartType] = useState<string>(chartTypes[0]);
-
-    const { avgDataArr, leftMargin, bottomMargin } = useMemo(() => getAverageData(csvData, x, y), [x, y, csvData]);
-
-    const [graphOptions, setGraphOptions] = useState<GraphOptions>({
-        data: avgDataArr,
-        colorScheme: "set3",
-        margin: { top: 0, right: 0, bottom: 0, left: 0 },
-        axisOptions: {
-            top: null,
-            right: null,
-            bottom: null,
-            left: null
-        }
-    });
+    const [colorScheme, setColorScheme] = useState<ColorScheme>("set3");
+    const [dataSpan, setDataSpan] = useState<"page" | "cumulative">("page");
 
     useEffect(() => {
-        setGraphOptions((prev) => ({
-            ...prev,
-            data: avgDataArr,
-            colorScheme: "set3",
-            margin: { top: 50, right: 50, bottom: bottomMargin, left: leftMargin },
-            axisOptions: {
-                top: null,
-                right: null,
-                bottom: {
-                    tickSize: 5,
-                    tickPadding: 5,
-                    tickRotation: bottomMargin > 100 ? -45 : 0,
-                    legend: x,
-                    legendPosition: "middle",
-                    legendOffset: bottomMargin - 10,
-                    truncateTickAt: 0
-                },
-                left: {
-                    tickSize: 5,
-                    tickPadding: 5,
-                    tickRotation: 0,
-                    legend: y,
-                    legendPosition: "middle",
-                    legendOffset: -leftMargin + 10,
-                    truncateTickAt: 0
-                }
-            }
-        }))
-    }, [avgDataArr, leftMargin, bottomMargin]);
+        if (csvData.length === 0) {
+            setX("");
+            setY("");
+        }
+    }, [csvData]);
 
     return (
         <Viewer>
             {
-                csvData.length > 0 &&
-                <div className="h-full flex flex-col justify-between items-center">
-                    <div className="w-full flex justify-between items-center text-gray-900">
-                        <div className="flex">
-                            <DropDown label="Color scheme" selected={graphOptions.colorScheme} setSelected={(selected) => setGraphOptions(prev => ({ ...prev, colorScheme: selected as ColorScheme }))} items={colorSchemes} />
+                csvData.length > 0 ?
+                    <div className="h-full flex flex-col justify-between items-center">
+                        <div className="w-full flex justify-between items-center">
+                            <div className="flex">
+                                <DropDown
+                                    label="Color scheme"
+                                    selected={colorScheme}
+                                    setSelected={(selected) => setColorScheme(selected as ColorScheme)}
+                                    items={colorSchemes}
+                                />
+                                <DropDown
+                                    label="Data span"
+                                    selected={dataSpan}
+                                    setSelected={(selected) => setDataSpan(selected as ("page" | "cumulative"))}
+                                    items={["page", "cumulative"]}
+                                />
+                            </div>
+                            <div className="flex">
+                                <DropDown label="x" selected={x} setSelected={setX} items={chartType === "Scatter" ? numericalColumns : stringColumns} />
+                                <DropDown label="y" selected={y} setSelected={setY} items={numericalColumns} />
+                                <DropDown label="Plot type" selected={chartType} setSelected={setChartType} items={chartTypes} />
+                            </div>
                         </div>
-                        <div className="flex">
-                            <DropDown label="x" selected={x} setSelected={setX} items={chartType === "Scatter" ? numericalColumns : stringColumns} />
-                            <DropDown label="y" selected={y} setSelected={setY} items={numericalColumns} />
-                            <DropDown label="Plot type" selected={chartType} setSelected={setChartType} items={chartTypes} />
-                        </div>
+                        {
+                            (x.length > 0 && y.length > 0)
+                                ?
+                                <GraphViewer csvData={csvData} colorScheme={colorScheme} dataSpan={dataSpan} chartType={chartType} x={x} y={y} />
+                                :
+                                <iframe src="https://lottie.host/embed/fabd2e03-010a-48f7-aa24-977d12c96253/0EZDPzi5lQ.json" height={"100%"} width={"100%"} />
+                        }
                     </div>
-                    {
-                        x.length > 0 && y.length > 0 &&
-                        <>
-                            {chartType === "Bar" && <BarGraph graphOptions={graphOptions} />}
-                            {chartType === "Line" && <LineGraph graphOptions={graphOptions} />}
-                            {chartType === "Scatter" && <ScatterPlot graphOptions={graphOptions} />}
-                        </>
-                    }
-                </div>
+                    :
+                    <div className="h-full w-full flex justify-center items-center">
+                        <iframe src="https://lottie.host/embed/fabd2e03-010a-48f7-aa24-977d12c96253/0EZDPzi5lQ.json" height={"100%"} width={"100%"} />
+                    </div>
             }
         </Viewer >
     );

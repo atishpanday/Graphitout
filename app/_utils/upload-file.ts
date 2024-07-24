@@ -1,3 +1,5 @@
+import { backend_url } from "@/environment-variables";
+
 export default async function uploadFile(file: File | null) {
     if (!file) {
         console.log("No file selected");
@@ -5,7 +7,7 @@ export default async function uploadFile(file: File | null) {
     }
     const formData = new FormData();
     formData.append("file", file);
-    const res = await fetch("http://localhost:8000/api/upload-file", {
+    const res = await fetch(`${backend_url}/api/upload-file`, {
         method: "POST",
         body: formData,
     });

@@ -3,7 +3,7 @@ import { RootState } from '../_store/store';
 import Pagination from './pagination';
 import { useState } from 'react';
 import fetchDataChunks from '../_utils/fetch-data-chunks';
-import { clearCSVData, setCSVData, setTotalPages } from '../_store/csv-slice';
+import { clearCSVData, setCSVData } from '../_store/csv-slice';
 import deleteFile from '../_utils/delete-file';
 import Viewer from './viewer';
 
@@ -17,7 +17,6 @@ export default function DataTable() {
     const handlePageChange = async (ind: number) => {
         const { totalPages, data } = await fetchDataChunks(ind, fileName || "");
         dispatch(setCSVData(data));
-        dispatch(setTotalPages(totalPages))
     };
 
     const handleDeleteData = async () => {

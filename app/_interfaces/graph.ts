@@ -84,3 +84,12 @@ export interface AverageData {
     leftMargin: number,
     bottomMargin: number,
 };
+
+export interface GraphViewerProps {
+    csvData: Record<string, any>[],
+    colorScheme: ColorScheme,
+    dataSpan: "page" | "cumulative",
+    chartType: string,
+    x: string,
+    y: string,
+};

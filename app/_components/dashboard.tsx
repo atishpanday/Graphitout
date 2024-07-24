@@ -17,7 +17,9 @@ export default function Dashboard() {
     };
 
     useEffect(() => {
-        setGraphArr([0]);
+        if (csvData.length === 0) {
+            setGraphArr([0]);
+        }
     }, [csvData]);
 
     return (
