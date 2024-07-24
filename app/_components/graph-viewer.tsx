@@ -6,7 +6,7 @@ import { GraphOptions, GraphViewerProps } from "../_interfaces/graph";
 import { useSelector } from "react-redux";
 import { RootState } from "../_store/store";
 
-export default function ({ csvData, colorScheme, dataSpan, chartType, x, y }: GraphViewerProps) {
+export default function GraphViewer({ csvData, colorScheme, dataSpan, chartType, x, y }: GraphViewerProps) {
 
     const { fileName, totalPages } = useSelector((state: RootState) => state.csv);
 
