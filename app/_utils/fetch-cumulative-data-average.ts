@@ -7,7 +7,7 @@ export default async function fetchCumulativeDataAverage(_totalPages: number, x:
     let longestXLabel: number = 1;
     let longestYLabel: number = 1;
 
-    const avgDataArr: GraphData[] = [];
+    const avgDataArr: GraphData[] = [{ id: "0", data: [] }];
     let bottomMargin = 0;
     let leftMargin = 0;
 
@@ -41,6 +41,8 @@ export default async function fetchCumulativeDataAverage(_totalPages: number, x:
             console.log(error);
         }
     }
+
+    console.log(avgDataArr);
 
     return {
         avgDataArr,

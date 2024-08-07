@@ -31,10 +31,8 @@ export default function UploadFile() {
             if (uploadRes?.ok) {
                 const fileName = (await uploadRes.json()).fileName
                 dispatch(setFileName(fileName));
-                const { totalPages, data } = await fetchDataChunks(0, fileName);
+                const { totalPages, data, numericalColumns, stringColumns } = await fetchDataChunks(0, fileName);
                 dispatch(setCSVData(data));
-                const numericalColumns = Object.keys(data[0]).filter((key: string) => { if (typeof data[0][key] === "number") return key });
-                const stringColumns = Object.keys(data[0]).filter((key: string) => { if (typeof data[0][key] === "string") return key });
                 dispatch(setNumericalColumns(numericalColumns));
                 dispatch(setStringColumns(stringColumns));
                 dispatch(setTotalPages(totalPages));

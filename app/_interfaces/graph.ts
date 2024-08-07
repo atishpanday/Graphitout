@@ -1,5 +1,6 @@
 export interface GraphProps {
     graphOptions: GraphOptions,
+    plotData: GraphData[],
 };
 
 export interface GraphData {
@@ -73,7 +74,6 @@ export interface AxisOptionsOrientations {
 };
 
 export interface GraphOptions {
-    data: GraphData[],
     colorScheme: ColorScheme,
     margin: Margin,
     axisOptions: AxisOptionsOrientations,
@@ -86,9 +86,7 @@ export interface AverageData {
 };
 
 export interface GraphViewerProps {
-    csvData: Record<string, any>[],
-    colorScheme: ColorScheme,
-    dataSpan: "page" | "cumulative",
+    graphOptions: GraphOptions,
     chartType: string,
     x: string,
     y: string,
