@@ -103,7 +103,7 @@ export default function Graph() {
                                 >
                                     <div className="h-full w-full p-6 flex flex-col bg-white shadow-lg rounded-sm">
                                         <GraphViewer graphOptions={graphOptions} chartType={chartType} x={x} y={y} />
-                                        <div className="flex justify-end">
+                                        <div className="w-full flex justify-end items-center bg-gray-100 shadow-md p-2">
                                             <button className="" type="button" onClick={() => setModalOpen(prev => !prev)}>
                                                 <GoScreenNormal
                                                     size={40}
