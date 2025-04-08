@@ -1,19 +1,18 @@
-import React, { useEffect, useState } from "react"
-import Data from "./data"
-import Graph from "./graph"
-import Banner from "./banner"
+import React, { useEffect, useState } from "react";
+import Data from "./data";
+import Graph from "./graph";
+import Banner from "./banner";
 import AddGraph from "./add-graph";
 import { useSelector } from "react-redux";
 import { RootState } from "../_store/store";
 
 export default function Dashboard() {
-
     const csvData = useSelector((state: RootState) => state.csv.csvData);
 
     const [graphArr, setGraphArr] = useState<number[]>([0]);
 
     const handleAddGraph = () => {
-        setGraphArr(prev => [...prev, prev[prev.length - 1] + 1])
+        setGraphArr((prev) => [...prev, prev[prev.length - 1] + 1]);
     };
 
     useEffect(() => {
@@ -23,9 +22,9 @@ export default function Dashboard() {
     }, [csvData]);
 
     return (
-        <div className="p-4">
+        <div className="p-2">
             <Banner />
-            <div className="w-full grid grid-cols-2 gap-x-2 gap-y-2 my-4">
+            <div className="w-full grid grid-cols-2 gap-x-2 gap-y-2 my-2">
                 <Data />
                 {graphArr.map((num, i) => (
                     <Graph key={i} />
@@ -34,4 +33,4 @@ export default function Dashboard() {
             </div>
         </div>
     );
-};
+}

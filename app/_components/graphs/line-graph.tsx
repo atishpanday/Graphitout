@@ -2,7 +2,6 @@ import { GraphProps } from "@/app/_interfaces/graph";
 import { ResponsiveLine } from "@nivo/line";
 
 export default function LineGraph({ graphOptions, plotData }: GraphProps) {
-
     return (
         <ResponsiveLine
             data={plotData}
@@ -13,8 +12,10 @@ export default function LineGraph({ graphOptions, plotData }: GraphProps) {
             axisBottom={graphOptions.axisOptions.bottom}
             axisLeft={graphOptions.axisOptions.left}
             pointSize={10}
+            isInteractive
+            animate
             enableArea
-        // areaBaselineValue={Math.min(...graphOptions.data[0].data.map((d) => d.y as number))}
+            // areaBaselineValue={Math.min(...graphOptions.data[0].data.map((d) => d.y as number))}
         />
     );
-};
+}

@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
 import { Provider } from "react-redux";
-import Dashboard from "./_components/dashboard";
 import { store } from "./_store/store";
+import Dashboard from "./_components/dashboard";
 
 export default function Home() {
     return (
@@ -10,4 +10,4 @@ export default function Home() {
             <Dashboard />
         </Provider>
     );
-};
+}
