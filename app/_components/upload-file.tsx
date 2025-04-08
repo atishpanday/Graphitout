@@ -21,7 +21,7 @@ export default function UploadFile() {
         (acceptedFiles: File[]) => {
             setFile(acceptedFiles[0]);
         },
-        [file]
+        [setFile]
     );
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -34,7 +34,7 @@ export default function UploadFile() {
         multiple: false,
     });
 
-    const handleSubmit = async () => {
+    const handleSubmit = useCallback(async () => {
         if (file) {
             const formData = new FormData();
             formData.append("file", file);
@@ -51,11 +51,11 @@ export default function UploadFile() {
                 dispatch(setTotalPages(totalPages));
             }
         }
-    };
+    }, [file, dispatch]);
 
     useEffect(() => {
         handleSubmit();
-    }, [file]);
+    }, [file, handleSubmit]);
 
     return (
         <Viewer>

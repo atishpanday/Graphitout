@@ -8,7 +8,7 @@ import { ColorScheme, GraphOptions } from "../_interfaces/graph";
 import GraphViewer from "./graph-viewer";
 import { GoScreenFull, GoScreenNormal } from "react-icons/go";
 
-const chartTypes = ["Bar", "Line", "Scatter"];
+const chartTypes = ["Bar", "Line", "Scatter", "Pie"];
 
 export default function Graph() {
     const { csvData, numericalColumns, stringColumns } = useSelector(
@@ -60,7 +60,7 @@ export default function Graph() {
             setX(numericalColumns[0]);
             setY(numericalColumns[1]);
         }
-    }, [chartType]);
+    }, [chartType, numericalColumns]);
 
     return (
         <Viewer>
@@ -79,7 +79,7 @@ export default function Graph() {
                         </div>
                         <div className="flex">
                             <DropDown
-                                label="x"
+                                label="x-axis"
                                 selected={x}
                                 setSelected={setX}
                                 items={
@@ -89,7 +89,7 @@ export default function Graph() {
                                 }
                             />
                             <DropDown
-                                label="y"
+                                label="y-axis"
                                 selected={y}
                                 setSelected={setY}
                                 items={numericalColumns}
