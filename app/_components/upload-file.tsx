@@ -71,7 +71,7 @@ export default function UploadFile() {
                         type="button"
                         className="px-4 py-2 m-1 font-semibold rounded-sm shadow-md hover:bg-gray-100"
                     >
-                        Upload or drag and drop a file (.csv, .txt, .xlsx)
+                        Upload or drag and drop a file (.csv)
                     </button>
                     <div>{file?.name}</div>
                 </form>
