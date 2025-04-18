@@ -8,7 +8,7 @@ import { ColorScheme, GraphOptions } from "../_interfaces/graph";
 import GraphViewer from "./graph-viewer";
 import { GoScreenFull, GoScreenNormal } from "react-icons/go";
 
-const chartTypes = ["Bar", "Line", "Scatter", "Pie"];
+const chartTypes = ["Bar", "Line", "Scatter"];
 
 export default function Graph() {
     const { csvData, numericalColumns, stringColumns } = useSelector(
